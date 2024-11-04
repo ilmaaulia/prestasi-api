@@ -1,26 +1,11 @@
-const Achievements = require('./model');
+const { StatusCodes } = require('http-status-codes');
+const { getAllAchievements, createAchievements, getOneAchievement, updateAchievements, deleteAchievements } = require('../../../services/mongoose/achievements');	
 
 const create = async (req, res, next) => {
 	try {
-		const {
-			name,
-			date,
-			activity_group,
-			activity_type,
-			achievement_type,
-			competition_level,
-		} = req.body;
+		const result = await createAchievements(req);
 
-		const result = await Achievements.create({
-			name,
-			date,
-			activity_group,
-			activity_type,
-			achievement_type,
-			competition_level,
-		});
-
-		res.status(201).json({
+		res.status(StatusCodes.CREATED).json({
 			data: result,
 		});
 	} catch (err) {
@@ -30,9 +15,9 @@ const create = async (req, res, next) => {
 
 const index = async (req, res, next) => {
 	try {
-		const result = await Achievements.find();
+		const result = await getAllAchievements();
 
-		res.status(200).json({
+		res.status(StatusCodes.OK).json({
 			data: result,
 		});
 	} catch (err) {
@@ -42,11 +27,9 @@ const index = async (req, res, next) => {
 
 const find = async (req, res, next) => {
 	try {
-		const { id } = req.params;
+		const result = await getOneAchievement(req);
 
-		const result = await Achievements.findOne({ _id: id });
-
-		res.status(200).json({
+		res.status(StatusCodes.OK).json({
 			data: result,
 		});
 	} catch (err) {
@@ -56,33 +39,9 @@ const find = async (req, res, next) => {
 
 const update = async (req, res, next) => {
 	try {
-		const { id } = req.params;
+		const result = await updateAchievements(req);
 
-		const {
-			name,
-			date,
-			activity_group,
-			activity_type,
-			achievement_type,
-			competition_level,
-			status,
-		} = req.body;
-
-		const result = await Achievements.findOneAndUpdate(
-			{ _id: id },
-			{
-				name,
-				date,
-				activity_group,
-				activity_type,
-				achievement_type,
-				competition_level,
-				status,
-			},
-			{ new: true, runValidators: true }
-		)
-
-		res.status(200).json({
+		res.status(StatusCodes.OK).json({
 			data: result,
 		});
 	} catch (err) {
@@ -92,11 +51,9 @@ const update = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
 	try {
-		const { id } = req.params;
+		const result = await deleteAchievements(req);
 
-		const result = await Achievements.findByIdAndDelete(id);
-
-		res.status(200).json({
+		res.status(StatusCodes.NO_CONTENT).json({
 			data: result,
 		});
 	} catch (err) {
