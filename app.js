@@ -9,6 +9,7 @@ const achievementsRouter = require('./app/api/v1/achievements/router');
 const imagesRouter = require('./app/api/v1/images/router');
 const studentsRouter = require('./app/api/v1/students/router');
 const newsesRouter = require('./app/api/v1/news/router');
+const adminRouter = require('./app/api/v1/admin/router');
 
 const v1 = '/api/v1';
 
@@ -31,6 +32,7 @@ app.use(v1, achievementsRouter);
 app.use(v1, imagesRouter);
 app.use(v1, studentsRouter);
 app.use(v1, newsesRouter);
+app.use(v1, adminRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
