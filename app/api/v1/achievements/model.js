@@ -43,6 +43,15 @@ let achievementSchema = Schema(
 			enum: statusEnum,
 			default: 'Belum Divalidasi',
     },
+    image: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Image',
+      required: [true, 'Bukti prestasi harus diisi']
+    },
+    student: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Student',
+    },
   },
   { timestamps: true }
 );
