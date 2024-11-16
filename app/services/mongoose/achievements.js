@@ -1,5 +1,5 @@
 const Achievements = require('../../api/v1/achievements/model');
-const { NotFoundError } = require('../../errors')
+const { NotFoundError } = require('../../errors');
 
 const createAchievements = async (req) => {
 	const {
@@ -9,6 +9,8 @@ const createAchievements = async (req) => {
 		activity_type,
 		achievement_type,
 		competition_level,
+		student,
+		image,
 	} = req.body;
 
 	const result = await Achievements.create({
@@ -18,13 +20,17 @@ const createAchievements = async (req) => {
 		activity_type,
 		achievement_type,
 		competition_level,
+		student,
+		image,
 	});
 
 	return result;
 }
 
 const getAllAchievements = async () => {
-	const result = await Achievements.find();
+	const result = await Achievements.find()
+		.populate({ path: 'student', select: 'name' })
+		.populate({ path: 'image', select: 'name' });
 
 	return result;
 }
@@ -32,9 +38,11 @@ const getAllAchievements = async () => {
 const getOneAchievement = async (req) => {
 	const { id } = req.params;
 
-	const result = await Achievements.findOne({ _id: id });
+	const result = await Achievements.findOne({ _id: id })
+		.populate({ path: 'student', select: 'name' })
+		.populate({ path: 'image', select: 'name' });
 
-	if (!result) throw new NotFoundError(`Tidak ada kategori dengan id ${id}`);
+	if (!result) throw new NotFoundError(`Tidak ada prestasi dengan id ${id}`);
 
 	return result;
 }
@@ -50,6 +58,8 @@ const updateAchievements = async (req) => {
 		achievement_type,
 		competition_level,
 		status,
+		student,
+		image,
 	} = req.body;
 
 	const result = await Achievements.findOneAndUpdate(
@@ -62,11 +72,15 @@ const updateAchievements = async (req) => {
 			achievement_type,
 			competition_level,
 			status,
+			student,
+			image,
 		},
 		{ new: true, runValidators: true }
-	);
+	)
+		.populate({ path: 'student', select: 'name'})
+		.populate({ path: 'image', select: 'name' });
 
-	if (!result) throw new NotFoundError(`Tidak ada kategori dengan id ${id}`);
+	if (!result) throw new NotFoundError(`Tidak ada prestasi dengan id ${id}`);
 
 	return result;
 }
@@ -76,7 +90,7 @@ const deleteAchievements = async (req) => {
 
 	const result = await Achievements.findOne({ _id: id });
 
-	if (!result) throw new NotFoundError(`Tidak ada kategori dengan id ${id}`);
+	if (!result) throw new NotFoundError(`Tidak ada prestasi dengan id ${id}`);
 
 	await result.deleteOne();
 
