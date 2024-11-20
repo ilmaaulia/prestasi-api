@@ -1,4 +1,5 @@
 const Achievements = require('../../api/v1/achievements/model');
+const { updateStudentWithAchievement } = require('../../services/mongoose/students');
 const { NotFoundError } = require('../../errors');
 
 const createAchievements = async (req) => {
@@ -23,6 +24,8 @@ const createAchievements = async (req) => {
 		student,
 		image,
 	});
+
+	await updateStudentWithAchievement(student, result._id);
 
 	return result;
 }

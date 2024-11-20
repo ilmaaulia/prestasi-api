@@ -1,5 +1,5 @@
 const Students = require('../../api/v1/students/model');
-const { NotFoundError } = require('../../errors')
+const { NotFoundError } = require('../../errors');
 
 const createStudents = async (req) => {
 	const {
@@ -8,6 +8,7 @@ const createStudents = async (req) => {
 		study_program,
 		email,
 		password,
+		image,
 	} = req.body;
 
 	const result = await Students.create({
@@ -16,13 +17,16 @@ const createStudents = async (req) => {
 		study_program,
 		email,
 		password,
+		image,
 	});
 
 	return result;
 }
 
 const getAllStudents = async () => {
-	const result = await Students.find();
+	const result = await Students.find()
+		.populate({ path: 'achievements', select: 'name' })
+		.populate({ path: 'image', select: 'name' });
 
 	return result;
 }
@@ -30,7 +34,9 @@ const getAllStudents = async () => {
 const getOneStudent = async (req) => {
 	const { id } = req.params;
 
-	const result = await Students.findOne({ _id: id });
+	const result = await Students.findOne({ _id: id })
+		.populate({ path: 'achievements', select: 'name date status' })
+		.populate({ path: 'image', select: 'name' });
 
 	if (!result) throw new NotFoundError(`Tidak ada mahasiswa dengan id ${id}`);
 
@@ -46,6 +52,7 @@ const updateStudents = async (req) => {
 		study_program,
 		email,
 		password,
+		image,
 	} = req.body;
 
 	const result = await Students.findOneAndUpdate(
@@ -56,6 +63,7 @@ const updateStudents = async (req) => {
 			study_program,
 			email,
 			password,
+			image,
 		},
 		{ new: true, runValidators: true }
 	);
@@ -77,10 +85,18 @@ const deleteStudents = async (req) => {
 	return result;
 }
 
+const updateStudentWithAchievement = async (studentId, achievementId) => {
+  await Students.findByIdAndUpdate(studentId, {
+    $push: { achievements: achievementId }
+  });
+};
+
+
 module.exports = {
 	getAllStudents,
 	createStudents,
 	getOneStudent,
 	updateStudents,
 	deleteStudents,
+	updateStudentWithAchievement,
 }
