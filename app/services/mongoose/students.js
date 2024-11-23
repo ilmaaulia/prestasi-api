@@ -35,7 +35,7 @@ const getOneStudent = async (req) => {
 	const { id } = req.params;
 
 	const result = await Students.findOne({ _id: id })
-		.populate({ path: 'achievements', select: 'name date status' })
+		.populate({ path: 'achievements', select: 'name' })
 		.populate({ path: 'image', select: 'name' });
 
 	if (!result) throw new NotFoundError(`Tidak ada mahasiswa dengan id ${id}`);
@@ -85,18 +85,10 @@ const deleteStudents = async (req) => {
 	return result;
 }
 
-const updateStudentWithAchievement = async (studentId, achievementId) => {
-  await Students.findByIdAndUpdate(studentId, {
-    $push: { achievements: achievementId }
-  });
-};
-
-
 module.exports = {
 	getAllStudents,
 	createStudents,
 	getOneStudent,
 	updateStudents,
 	deleteStudents,
-	updateStudentWithAchievement,
 }
