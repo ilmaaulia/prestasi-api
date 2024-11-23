@@ -38,15 +38,20 @@ const studentSchema = Schema ({
 		type: String,
 		required: [true, 'Password harus diisi'],
 	},
-	achievements: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Achievement',
-  }],
 	image: {
 		type: Schema.Types.ObjectId,
 		ref: 'Image',
 		default: '67286e1b93f5359c0df7f267',
 	},
 });
+
+studentSchema.virtual('achievements', {
+  ref: 'Achievement',
+  localField: '_id',
+  foreignField: 'student'
+});
+
+studentSchema.set('toObject', { virtuals: true });
+studentSchema.set('toJSON', { virtuals: true });
 
 module.exports = model('Student', studentSchema);
