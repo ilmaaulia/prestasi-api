@@ -23,8 +23,20 @@ const createStudents = async (req) => {
 	return result;
 }
 
-const getAllStudents = async () => {
-	const result = await Students.find()
+const getAllStudents = async (req) => {
+	const { keyword, study_program } = req.query;
+
+	let condition = {};
+
+	if (keyword) {
+		condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
+	}
+
+	if (study_program) {
+		condition = { ...condition, study_program };
+	}
+
+	const result = await Students.find(condition)
 		.populate({ path: 'achievements', select: 'name' })
 		.populate({ path: 'image', select: 'name' });
 
