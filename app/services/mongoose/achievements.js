@@ -27,8 +27,28 @@ const createAchievements = async (req) => {
 	return result;
 }
 
-const getAllAchievements = async () => {
-	const result = await Achievements.find()
+const getAllAchievements = async (req) => {
+	const { activity_group, activity_type, achievement_type, competition_level } = req.query;
+
+	let condition = {};
+
+	if (activity_group) {
+		condition.activity_group = activity_group;
+	}
+
+	if (activity_type) {
+		condition.activity_type = activity_type;
+	}
+
+	if (achievement_type) {
+		condition.achievement_type = achievement_type;
+	}
+
+	if (competition_level) {
+		condition.competition_level = competition_level;
+	}
+
+	const result = await Achievements.find(condition)
 		.populate({ path: 'student', select: 'name' })
 		.populate({ path: 'image', select: 'name' });
 
