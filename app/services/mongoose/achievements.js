@@ -1,5 +1,5 @@
 const Achievements = require('../../api/v1/achievements/model');
-const { NotFoundError } = require('../../errors');
+const { NotFoundError, BadRequestError } = require('../../errors');
 
 const createAchievements = async (req) => {
 	const {
@@ -117,10 +117,32 @@ const deleteAchievements = async (req) => {
 	return result;
 }
 
+const updateAchievementStatus = async (req) => {
+	const { id } = req.params;
+	const { status } = req.body;
+
+	if (!['Belum Divalidasi', 'Valid', 'Tidak Valid'].includes(status)) {
+		throw new BadRequestError('Status tidak valid');
+	}
+
+	const checkAchievement = await Achievements.findOne({ 
+		_id: id
+	});
+
+	if (!checkAchievement) throw new NotFoundError(`Tidak ada prestasi dengan id ${id}`);
+
+	checkAchievement.status = status;
+
+	await checkAchievement.save();
+
+	return checkAchievement;
+}
+
 module.exports = {
 	getAllAchievements,
 	createAchievements,
 	getOneAchievement,
 	updateAchievements,
 	deleteAchievements,
+	updateAchievementStatus,
 }

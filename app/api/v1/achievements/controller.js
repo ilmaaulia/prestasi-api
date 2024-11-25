@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { getAllAchievements, createAchievements, getOneAchievement, updateAchievements, deleteAchievements } = require('../../../services/mongoose/achievements');	
+const { getAllAchievements, createAchievements, getOneAchievement, updateAchievements, deleteAchievements, updateAchievementStatus } = require('../../../services/mongoose/achievements');	
 
 const create = async (req, res, next) => {
 	try {
@@ -61,10 +61,23 @@ const destroy = async (req, res, next) => {
 	}
 }
 
+const updateStatus = async (req, res, next) => {
+  try {
+    const result = await updateAchievementStatus(req);
+
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
 	create,
 	index,
 	find,
 	update,
 	destroy,
+	updateStatus,
 }
