@@ -1,11 +1,23 @@
 const { StatusCodes } = require('http-status-codes');
-const { getAllStudents, createStudents, getOneStudent, updateStudents, deleteStudents } = require('../../../services/mongoose/students');	
+const { signupStudents, activateStudents, getAllStudents,  getOneStudent, updateStudents, deleteStudents } = require('../../../services/mongoose/students');	
 
-const create = async (req, res, next) => {
+const signup = async (req, res, next) => {
 	try {
-		const result = await createStudents(req);
+		const result = await signupStudents(req);
 
 		res.status(StatusCodes.CREATED).json({
+			data: result,
+		});
+	} catch (err) {
+		next(err);
+	}
+}
+
+const activeStudent = async (req, res, next) => {
+	try {
+		const result = await activateStudents(req);
+
+		res.status(StatusCodes.OK).json({
 			data: result,
 		});
 	} catch (err) {
@@ -62,7 +74,8 @@ const destroy = async (req, res, next) => {
 }
 
 module.exports = {
-	create,
+	signup,
+	activeStudent,
 	index,
 	find,
 	update,

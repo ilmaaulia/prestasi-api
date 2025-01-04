@@ -1,9 +1,11 @@
 const Students = require('../../api/v1/students/model');
-const { NotFoundError } = require('../../errors');
+const { NotFoundError, BadRequestError } = require('../../errors');
+const { otpMail } = require('../../services/email');
 
-const createStudents = async (req) => {
+const signupStudents = async (req) => {
 	const {
-		name,
+		firstName,
+		lastName,
 		student_id,
 		study_program,
 		email,
@@ -11,14 +13,62 @@ const createStudents = async (req) => {
 		image,
 	} = req.body;
 
-	const result = await Students.create({
-		name,
-		student_id,
-		study_program,
+	let result = await Students.findOne({
 		email,
-		password,
-		image,
+		status: 'Aktif',
 	});
+
+	if (result) throw new BadRequestError('Mahasiswa sudah terdaftar');
+
+	result = await Students.findOne({
+		email,
+		status: 'Tidak Aktif',
+	});
+
+	if (result) {
+		result.firstName = firstName;
+		result.lastName = lastName;
+		result.student_id = student_id;
+		result.study_program = study_program;
+		result.email = email;
+		result.password = password;
+		result.image = image;
+		result.otp = Math.floor(Math.random() * 9999)
+		await result.save();
+	} else {
+		result = await Students.create({
+			firstName,
+			lastName,
+			student_id,
+			study_program,
+			email,
+			password,
+			image,
+			otp: Math.floor(Math.random() * 9999)
+		})
+	}
+	await otpMail(email, result);
+
+	return result;
+}
+
+const activateStudents = async (req) => {
+	const { email, otp } = req.body;
+	const check = await Students.findOne({
+		email,
+	});
+
+	if (!check) throw new NotFoundError('Mahasiswa belum terdaftar');
+
+	if (check && check.otp !== otp) throw new BadRequestError('OTP tidak sesuai');
+
+	const result = await Students.findByIdAndUpdate(
+		check._id,
+		{
+			status: 'Aktif',
+		},
+		{ new: true }
+	);
 
 	return result;
 }
@@ -59,7 +109,8 @@ const updateStudents = async (req) => {
 	const { id } = req.params;
 
 	const {
-		name,
+		firstName,
+		lastName,
 		student_id,
 		study_program,
 		email,
@@ -70,7 +121,8 @@ const updateStudents = async (req) => {
 	const result = await Students.findOneAndUpdate(
 		{ _id: id },
 		{
-			name,
+			firstName,
+			lastName,
 			student_id,
 			study_program,
 			email,
@@ -98,8 +150,9 @@ const deleteStudents = async (req) => {
 }
 
 module.exports = {
+	signupStudents,
+	activateStudents,
 	getAllStudents,
-	createStudents,
 	getOneStudent,
 	updateStudents,
 	deleteStudents,
