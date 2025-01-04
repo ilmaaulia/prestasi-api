@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Informasi Prestasi Mahasiswa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+        min-width: 1000px;
+        overflow: auto;
+        line-height: 2;
+      }
+      .container {
+        margin: 50px auto;
+        width: 70%;
+        padding: 20px 0;
+      }
+      .header {
+        border-bottom: 1px solid #eee;
+      }
+      .header a {
+        font-size: 1.4em;
+        color: #00466a;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .otp-box {
+        background: #00466a;
+        width: max-content;
+        padding: 2px 10px;
+        color: #fff;
+        border-radius: 4px;
+				font-size: 30px;
+      }
+      .footer p {
+        font-size: 0.9em;
+      }
+      .footer hr {
+        border: none;
+        border-top: 1px solid #eee;
+      }
+      .contact {
+        float: right;
+        padding: 8px 0;
+        color: #aaa;
+        font-size: 0.8em;
+        line-height: 1;
+        font-weight: 300;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <a href="">Prestasi IPI</a>
+      </div>
+      <p>Halo,</p>
+      <p>
+        Gunakan Kode OTP berikut untuk melengkapi prosedur registrasi Anda.
+      </p>
+      <h2 class="otp-box">
+        {{otp}}
+      </h2>
+			<div class="footer">
+				<p>Salam,</p>
+				<p>Kemahasiswaan IPI Garut</p>
+			</div>
+      <hr />
+      <div class="contact">
+        <p>Institut Pendidikan Indonesia Garut</p>
+        <p>Jl. Terusan Pahlawan No. 32</p>
+        <p>Garut, Indonesia</p>
+      </div>
+    </div>
+  </body>
+</html>
