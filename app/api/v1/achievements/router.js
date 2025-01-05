@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { create, index, find, update, destroy, updateStatus } = require('./controller');
-const { authenticateAdmin } = require('../../../middlewares/auth');
+const { authenticateAdmin, authenticateStudent } = require('../../../middlewares/auth');
 
-router.post('/achievements', authenticateAdmin, create);
+router.post('/achievements', authenticateAdmin, authenticateStudent, create);
 router.get('/achievements', index);
 router.get('/achievements/:id', find);
-router.put('/achievements/:id', authenticateAdmin, update);
+router.put('/achievements/:id', authenticateAdmin, authenticateStudent, update);
 router.delete('/achievements/:id', authenticateAdmin, destroy);
 router.put('/achievements/:id/status', authenticateAdmin, updateStatus);
 
