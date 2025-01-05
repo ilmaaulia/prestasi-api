@@ -9,7 +9,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   // Error data yang dikirim tidak memenuhi aturan mongoose
   if (err.name === 'ValidationError') {
     customError.msg = Object.values(err.errors)
-      .map((item) => item.message)
+      .map(item => item.message)
       .join(', ');
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }
@@ -17,7 +17,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   // Error duplicate primary key dari mongoose
   if (err.code && err.code === 11000) {
     customError.msg = `Nilai duplikat dimasukkan untuk field ${Object.keys(
-      err.keyValue
+      err.keyValue,
     )}, silakan gunakan nilai lain`;
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }

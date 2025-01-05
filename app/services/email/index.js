@@ -26,6 +26,7 @@ const otpMail = async (email, data) => {
 
     return await transporter.sendMail(message);
   } catch (ex) {
+    // eslint-disable-next-line no-console
     console.log(ex);
   }
 };

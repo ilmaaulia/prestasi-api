@@ -40,20 +40,20 @@ let achievementSchema = Schema(
     },
     status: {
       type: String,
-			enum: statusEnum,
-			default: 'Belum Divalidasi',
+      enum: statusEnum,
+      default: 'Belum Divalidasi',
     },
     image: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
-      required: [true, 'Bukti prestasi harus diisi']
+      required: [true, 'Bukti prestasi harus diisi'],
     },
     student: {
       type: mongoose.Types.ObjectId,
       ref: 'Student',
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = model('Achievement', achievementSchema);
