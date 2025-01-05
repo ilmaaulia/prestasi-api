@@ -24,10 +24,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-	res.status(200).json({
-		message: 'api is working',
-	})
-})
+  res.status(200).json({
+    message: 'api is working',
+  });
+});
 
 app.use(v1, achievementsRouter);
 app.use(v1, imagesRouter);
