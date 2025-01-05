@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { signupStudents, activateStudents, getAllStudents,  getOneStudent, updateStudents, deleteStudents } = require('../../../services/mongoose/students');	
+const { signupStudents, activateStudents, signinStudents, getAllStudents,  getOneStudent, updateStudents, deleteStudents } = require('../../../services/mongoose/students');	
 
 const signup = async (req, res, next) => {
 	try {
@@ -19,6 +19,18 @@ const activeStudent = async (req, res, next) => {
 
 		res.status(StatusCodes.OK).json({
 			data: result,
+		});
+	} catch (err) {
+		next(err);
+	}
+}
+
+const signin = async (req, res, next) => {
+	try {
+		const result = await signinStudents(req);
+
+		res.status(StatusCodes.OK).json({
+			data: { token: result },
 		});
 	} catch (err) {
 		next(err);
@@ -76,6 +88,7 @@ const destroy = async (req, res, next) => {
 module.exports = {
 	signup,
 	activeStudent,
+	signin,
 	index,
 	find,
 	update,

@@ -1,6 +1,7 @@
 const Students = require('../../api/v1/students/model');
-const { NotFoundError, BadRequestError } = require('../../errors');
+const { NotFoundError, BadRequestError, UnauthorizedError } = require('../../errors');
 const { otpMail } = require('../../services/email');
+const { createTokenStudent, createJWT} = require('../../utils');
 
 const signupStudents = async (req) => {
 	const {
@@ -72,6 +73,28 @@ const activateStudents = async (req) => {
 
 	return result;
 }
+
+const signinStudents = async (req) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequestError('Email dan password harus diisi');
+  }
+
+  const result = await Students.findOne({ email: email });
+
+  if (!result) throw new UnauthorizedError('Email atau Password salah.');
+
+	if (result.status === 'Tidak Aktif') throw new UnauthorizedError('Akun belum diaktivasi');
+
+  const isPasswordCorrect = await result.comparePassword(password);
+
+  if (!isPasswordCorrect) throw new UnauthorizedError('Email atau Password salah.');
+
+  const token = createJWT({ payload: createTokenStudent(result) });
+
+  return token;
+};
 
 const getAllStudents = async (req) => {
 	const { keyword, study_program } = req.query;
@@ -152,6 +175,7 @@ const deleteStudents = async (req) => {
 module.exports = {
 	signupStudents,
 	activateStudents,
+	signinStudents,
 	getAllStudents,
 	getOneStudent,
 	updateStudents,

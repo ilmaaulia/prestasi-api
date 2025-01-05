@@ -6,4 +6,13 @@ const createTokenUser = (user) => {
 	};
 };
 
-module.exports = createTokenUser;
+const createTokenStudent = (student) => {
+	return {
+		userId: student._id,
+		firstName: student.firstName,
+		lastName: student.lastName,
+		email: student.email,
+	};
+}
+
+module.exports = { createTokenUser, createTokenStudent };
