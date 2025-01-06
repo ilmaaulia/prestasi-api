@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { create, find, index, update, destroy } = require('./controller');
-const { authenticateAdmin } = require('../../../middlewares/auth');
+const { authenticateUser, authorizeRoles } = require('../../../middlewares/auth');
 
-router.post('/news', authenticateAdmin, create);
+router.post('/news', authenticateUser, authorizeRoles('admin'), create);
 router.get('/newses', index);
 router.get('/news/:id', find);
-router.put('/news/:id', authenticateAdmin, update);
-router.delete('/news/:id', authenticateAdmin, destroy);
+router.put('/news/:id', authenticateUser, authorizeRoles('admin'), update);
+router.delete('/news/:id', authenticateUser, authorizeRoles('admin'), destroy);
 
 module.exports = router;
