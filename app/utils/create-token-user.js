@@ -3,6 +3,7 @@ const createTokenUser = (user) => {
     userId: user._id,
     name: user.name,
     email: user.email,
+    role: 'admin',
   };
 };
 
@@ -12,6 +13,7 @@ const createTokenStudent = (student) => {
     firstName: student.firstName,
     lastName: student.lastName,
     email: student.email,
+    role: 'student',
   };
 };
 
