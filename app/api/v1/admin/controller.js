@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { createAdmin } = require('../../../services/mongoose/admin');
+const { createAdmin, signin } = require('../../../services/mongoose/admin');
 
 const create = async (req, res, next) => {
   try {
@@ -13,6 +13,19 @@ const create = async (req, res, next) => {
   }
 };
 
+const signinCms = async (req, res, next) => {
+  try {
+    const result = await signin(req);
+
+    res.status(StatusCodes.CREATED).json({
+      data: { token: result },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   create,
+  signinCms,
 };
