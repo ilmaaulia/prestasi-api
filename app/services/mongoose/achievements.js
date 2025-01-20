@@ -49,7 +49,7 @@ const getAllAchievements = async req => {
   }
 
   const result = await Achievements.find(condition)
-    .populate({ path: 'student', select: 'name' })
+    .populate({ path: 'student', select: 'firstName lastName' })
     .populate({ path: 'image', select: 'name' });
 
   return result;
