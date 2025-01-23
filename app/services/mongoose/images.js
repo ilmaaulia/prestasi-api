@@ -11,6 +11,14 @@ const createImage = async (req) => {
   return result;
 };
 
+const getOneImage = async (id) => {
+  const result = await Images.findById(id);
+
+  if (!result) throw new NotFoundError(`Tidak ada gambar dengan id ${id}`);
+
+  return result;
+};
+
 const updateImage = async (req) => {
   const { id } = req.params;
 
@@ -29,4 +37,4 @@ const updateImage = async (req) => {
   return result;
 };
 
-module.exports = { createImage, updateImage };
+module.exports = { createImage, updateImage, getOneImage };
