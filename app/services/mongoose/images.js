@@ -4,7 +4,7 @@ const { NotFoundError } = require('../../errors');
 const createImage = async (req) => {
   const result = await Images.create({
     name: req.file
-      ? `uploads/${req.file.filename}`
+      ? `uploads/${encodeURIComponent(req.file.filename)}`
       : 'uploads/avatar/default.png',
   });
 
@@ -23,7 +23,7 @@ const updateImage = async (req) => {
   const { id } = req.params;
 
   const newImage = {
-    name: req.file ? `uploads/${req.file.filename}` : undefined,
+    name: req.file ? `uploads/${encodeURIComponent(req.file.filename)}` : undefined,
   };
 
   const result = await Images.findOneAndUpdate(
