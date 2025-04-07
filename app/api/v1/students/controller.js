@@ -30,7 +30,7 @@ const signin = async (req, res, next) => {
     const result = await signinStudents(req);
 
     res.status(StatusCodes.OK).json({
-      data: { token: result },
+      data: { token: result.token, role: result.role },
     });
   } catch (err) {
     next(err);

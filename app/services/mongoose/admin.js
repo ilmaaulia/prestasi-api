@@ -37,7 +37,7 @@ const signin = async (req) => {
 
   const token = createJWT({ payload: createTokenUser(result) });
 
-  return token;
+  return { token, role: createTokenUser(result).role };
 };
 
 module.exports = {
