@@ -2,16 +2,16 @@ const News = require('../../api/v1/news/model');
 const { NotFoundError } = require('../../errors');
 
 const createNews = async (req) => {
-  const { title, content, author } = req.body;
+  const { title, content, author, image } = req.body;
 
-  const result = await News.create({ title, content, author });
+  const result = await News.create({ title, content, author, image });
 
   return result;
 };
 
 const getAllNewses = async () => {
   const result = await News.find()
-    .populate({ path: 'author', select: 'name' });
+    .populate({ path: 'image', select: 'name' });
 
   return result;
 };
@@ -20,7 +20,7 @@ const getOneNews = async (req) => {
   const { id } = req.params;
 
   const result = await News.findOne({ _id: id })
-    .populate({ path: 'author', select: 'name' });
+    .populate({ path: 'image', select: 'name' });
 
   if (!result) throw new NotFoundError(`Tidak ada berita dengan id ${id}`);
 
@@ -36,9 +36,7 @@ const updateNews = async (req) => {
     { _id: id },
     { title, content },
     { new: true, runValidators: true },
-  )
-    .populate({ path: 'author', select: 'name' });
-  ;
+  ).populate({ path: 'image', select: 'name' });
 
   if (!result) throw new NotFoundError(`Tidak ada berita dengan id ${id}`);
 
@@ -48,7 +46,8 @@ const updateNews = async (req) => {
 const deleteNews = async (req) => {
   const { id } = req.params;
 
-  const result = await News.findOne({ _id: id });
+  const result = await News.findOne({ _id: id })
+    .populate({ path: 'image', select: 'name' });
 
   if (!result) throw new NotFoundError(`Tidak ada berita dengan id ${id}`);
 

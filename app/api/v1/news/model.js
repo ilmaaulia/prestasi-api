@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose');
+const { model, Schema, mongoose } = require('mongoose');
 
 const newsSchema = Schema(
   {
@@ -11,8 +11,13 @@ const newsSchema = Schema(
       required: true,
     },
     author: {
-      type: Schema.Types.ObjectId,
-      ref: 'Admin',
+      type: String,
+      required: true,
+    },
+    image: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Image',
+      default: null,
     },
   },
   { timestamps: true },
