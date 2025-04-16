@@ -1,7 +1,7 @@
 const { model, Schema } = require('mongoose');
-const bycrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
-const studentSchema = Schema (
+const studentSchema = Schema(
   {
     firstName: {
       type: String,
@@ -72,13 +72,13 @@ studentSchema.virtual('achievements', {
 studentSchema.pre('save', async function(next) {
   const User = this;
   if (User.isModified('password')) {
-    User.password = await bycrypt.hash(User.password, 12);
+    User.password = await bcrypt.hash(User.password, 12);
   }
   next();
 });
 
 studentSchema.methods.comparePassword = async function(candidatePassword) {
-  const isMatch = await bycrypt.compare(candidatePassword, this.password);
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
   return isMatch;
 };
 
