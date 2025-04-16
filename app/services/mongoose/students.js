@@ -141,21 +141,22 @@ const updateStudents = async (req) => {
     image,
   } = req.body;
 
-  const result = await Students.findOneAndUpdate(
-    { _id: id },
-    {
-      firstName,
-      lastName,
-      student_id,
-      study_program,
-      email,
-      password,
-      image,
-    },
-    { new: true, runValidators: true },
-  );
+  const student = await Students.findById(id);
 
-  if (!result) throw new NotFoundError(`Tidak ada mahasiswa dengan id ${id}`);
+  if (!student) throw new NotFoundError(`Tidak ada mahasiswa dengan id ${id}`);
+
+  student.firstName = firstName || student.firstName;
+  student.lastName = lastName || student.lastName;
+  student.student_id = student_id || student.student_id;
+  student.study_program = study_program || student.study_program;
+  student.email = email || student.email;
+  student.image = image || student.image;
+
+  if (password) {
+    student.password = password;
+  }
+
+  const result = await student.save();
 
   return result;
 };
