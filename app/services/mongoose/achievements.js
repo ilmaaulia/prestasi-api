@@ -28,7 +28,15 @@ const createAchievements = async req => {
 };
 
 const getAllAchievements = async req => {
-  const { activity_group, activity_type, achievement_type, competition_level, sort, limit } = req.query;
+  const {
+    activity_group,
+    activity_type,
+    achievement_type,
+    competition_level,
+    sort,
+    limit,
+    student,
+  } = req.query;
 
   let condition = {};
 
@@ -46,6 +54,10 @@ const getAllAchievements = async req => {
 
   if (competition_level) {
     condition.competition_level = competition_level;
+  }
+
+  if (student) {
+    condition.student = student;
   }
 
   let query = Achievements.find(condition)
