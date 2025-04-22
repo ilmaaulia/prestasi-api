@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
 
 const index = async (req, res, next) => {
   try {
-    const result = await getAllNewses();
+    const result = await getAllNewses(req);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (error) {

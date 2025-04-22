@@ -9,9 +9,33 @@ const createNews = async (req) => {
   return result;
 };
 
-const getAllNewses = async () => {
-  const result = await News.find()
+const getAllNewses = async (req) => {
+  const { title, sort, limit } = req.query;
+
+  let condition = {};
+
+  if (title) {
+    condition.title = { $regex: title, $options: 'i' };
+  }
+
+  let query = News.find(condition)
     .populate({ path: 'image', select: 'name' });
+
+  if (sort) {
+    const sortCriteria = {};
+    const [field, order] = sort.split(':');
+    sortCriteria[field] = order === 'desc' ? -1 : 1;
+    query = query.sort(sortCriteria);
+  }
+  
+  if (limit) {
+    const parsedLimit = parseInt(limit, 10);
+    if (!isNaN(parsedLimit) && parsedLimit > 0) {
+      query = query.limit(parsedLimit);
+    }
+  }
+
+  const result = await query;
 
   return result;
 };
