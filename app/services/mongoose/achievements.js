@@ -28,7 +28,7 @@ const createAchievements = async req => {
 };
 
 const getAllAchievements = async req => {
-  const { activity_group, activity_type, achievement_type, competition_level } = req.query;
+  const { activity_group, activity_type, achievement_type, competition_level, sort, limit } = req.query;
 
   let condition = {};
 
@@ -48,9 +48,25 @@ const getAllAchievements = async req => {
     condition.competition_level = competition_level;
   }
 
-  const result = await Achievements.find(condition)
+  let query = Achievements.find(condition)
     .populate({ path: 'student', select: 'firstName lastName' })
     .populate({ path: 'image', select: 'name' });
+
+  if (sort) {
+    const sortCriteria = {};
+    const [field, order] = sort.split(':');
+    sortCriteria[field] = order === 'desc' ? -1 : 1;
+    query = query.sort(sortCriteria);
+  }
+
+  if (limit) {
+    const parsedLimit = parseInt(limit, 10);
+    if (!isNaN(parsedLimit) && parsedLimit > 0) {
+      query = query.limit(parsedLimit);
+    }
+  }
+
+  const result = await query;
 
   return result;
 };
