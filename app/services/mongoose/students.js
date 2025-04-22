@@ -93,7 +93,12 @@ const signinStudents = async (req) => {
 
   const token = createJWT({ payload: createTokenStudent(result) });
 
-  return { token, role: createTokenStudent(result).role };
+  return { 
+    token,
+    id: result._id,
+    firstName: result.firstName,
+    role: createTokenStudent(result).role,
+  };
 };
 
 const getAllStudents = async (req) => {
