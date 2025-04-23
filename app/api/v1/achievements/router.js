@@ -7,7 +7,7 @@ router.post('/achievements', authenticateUser, authorizeRoles('admin', 'student'
 router.get('/achievements', index);
 router.get('/achievements/:id', find);
 router.put('/achievements/:id', authenticateUser, authorizeRoles('admin', 'student'), update);
-router.delete('/achievements/:id', authenticateUser, authorizeRoles('admin'), destroy);
+router.delete('/achievements/:id', authenticateUser, authorizeRoles('admin', 'student'), destroy);
 router.put('/achievements/:id/status', authenticateUser, authorizeRoles('admin'), updateStatus);
 
 module.exports = router;
