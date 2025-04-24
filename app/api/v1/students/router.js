@@ -8,7 +8,7 @@ router.put('/students/active', activeStudent);
 router.post('/students/signin', signin);
 router.get('/students', index);
 router.get('/students/:id', find);
-router.put('/students/:id', authenticateUser, authorizeRoles('admin'), update);
+router.put('/students/:id', authenticateUser, authorizeRoles('admin', 'student'), update);
 router.delete('/students/:id', authenticateUser, authorizeRoles('admin'), destroy);
 
 module.exports = router;
