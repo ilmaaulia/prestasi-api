@@ -107,7 +107,13 @@ const getAllStudents = async (req) => {
   let condition = {};
 
   if (keyword) {
-    condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
+    condition = {
+      ...condition, 
+      $or: [
+        { firstName: { $regex: keyword, $options: 'i' } },
+        { lastName: { $regex: keyword, $options: 'i' } },
+      ],
+    };
   }
 
   if (study_program) {

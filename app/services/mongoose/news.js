@@ -10,12 +10,12 @@ const createNews = async (req) => {
 };
 
 const getAllNewses = async (req) => {
-  const { title, sort, limit } = req.query;
+  const { keyword, sort, limit } = req.query;
 
   let condition = {};
 
-  if (title) {
-    condition.title = { $regex: title, $options: 'i' };
+  if (keyword) {
+    condition = { ...condition, title: { $regex: keyword, $options: 'i' } };
   }
 
   let query = News.find(condition)
