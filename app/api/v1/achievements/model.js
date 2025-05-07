@@ -51,6 +51,7 @@ let achievementSchema = Schema(
     student: {
       type: mongoose.Types.ObjectId,
       ref: 'Student',
+      required: [true, 'Nama Mahasiswa harus diisi'],
     },
   },
   { timestamps: true },
