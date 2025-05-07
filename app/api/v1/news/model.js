@@ -4,15 +4,15 @@ const newsSchema = Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, 'Judul berita harus diisi'],
     },
     content: {
       type: String,
-      required: true,
+      required: [true, 'Konten berita harus diisi'],
     },
     author: {
       type: String,
-      required: true,
+      required: [true, 'Penulis berita harus diisi'],
     },
     image: {
       type: mongoose.Types.ObjectId,
