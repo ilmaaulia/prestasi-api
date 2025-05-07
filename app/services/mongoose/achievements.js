@@ -36,6 +36,7 @@ const getAllAchievements = async req => {
     sort,
     limit,
     student,
+    keyword,
   } = req.query;
 
   let condition = {};
@@ -58,6 +59,10 @@ const getAllAchievements = async req => {
 
   if (student) {
     condition.student = student;
+  }
+
+  if (keyword) {
+    condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
   }
 
   let query = Achievements.find(condition)
