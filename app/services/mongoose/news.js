@@ -54,11 +54,11 @@ const getOneNews = async (req) => {
 const updateNews = async (req) => {
   const { id } = req.params;
 
-  const { title, content, image } = req.body;
+  const { title, content, author, image } = req.body;
 
   const result = await News.findOneAndUpdate(
     { _id: id },
-    { title, content, image },
+    { title, content, author, image },
     { new: true, runValidators: true },
   ).populate({ path: 'image', select: 'name' });
 
