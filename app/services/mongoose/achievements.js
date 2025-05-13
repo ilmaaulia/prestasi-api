@@ -154,7 +154,7 @@ const updateAchievementStatus = async req => {
   const { id } = req.params;
   const { status } = req.body;
 
-  if (!['Belum Divalidasi', 'Valid', 'Tidak Valid'].includes(status)) {
+  if (!['Belum Valid', 'Valid'].includes(status)) {
     throw new BadRequestError('Status tidak valid');
   }
 

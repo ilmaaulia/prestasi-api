@@ -5,7 +5,7 @@ const activityGroupEnum = ['Akademik', 'Non-akademik'];
 const activityTypeEnum = ['Aktivitas Kemahasiswaan', 'Kompetisi', 'PKM'];
 const achievementTypeEnum = ['Science', 'Seni', 'Olahraga', 'Lainnya'];
 const competitionLevelEnum = ['Internasional', 'Nasional', 'Regional', 'Lainnya'];
-const statusEnum = ['Belum Divalidasi', 'Valid', 'Tidak Valid'];
+const statusEnum = ['Belum Valid', 'Valid'];
 
 let achievementSchema = Schema(
   {
@@ -41,7 +41,7 @@ let achievementSchema = Schema(
     status: {
       type: String,
       enum: statusEnum,
-      default: 'Belum Divalidasi',
+      default: 'Belum Valid',
     },
     image: {
       type: mongoose.Types.ObjectId,
