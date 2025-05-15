@@ -51,7 +51,22 @@ const signupStudents = async (req) => {
   }
   await otpMail(email, result);
 
-  return result;
+  const orderedResult = {
+    firstName: result.firstName,
+    lastName: result.lastName,
+    student_id: result.student_id,
+    study_program: result.study_program,
+    email: result.email,
+    password: result.password,
+    image: result.image,
+    status: result.status,
+    otp: result.otp,
+    createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
+    id: result.id,
+  };
+
+  return orderedResult;
 };
 
 const activateStudents = async (req) => {
