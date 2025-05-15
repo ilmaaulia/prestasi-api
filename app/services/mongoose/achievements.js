@@ -37,30 +37,16 @@ const getAllAchievements = async req => {
     limit,
     student,
     keyword,
+    page = 1,
   } = req.query;
 
   let condition = {};
 
-  if (activity_group) {
-    condition.activity_group = activity_group;
-  }
-
-  if (activity_type) {
-    condition.activity_type = activity_type;
-  }
-
-  if (achievement_type) {
-    condition.achievement_type = achievement_type;
-  }
-
-  if (competition_level) {
-    condition.competition_level = competition_level;
-  }
-
-  if (student) {
-    condition.student = student;
-  }
-
+  if (activity_group) condition.activity_group = activity_group;
+  if (activity_type) condition.activity_type = activity_type;
+  if (achievement_type) condition.achievement_type = achievement_type;
+  if (competition_level) condition.competition_level = competition_level;
+  if (student) condition.student = student;
   if (keyword) {
     condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
   }
@@ -70,22 +56,25 @@ const getAllAchievements = async req => {
     .populate({ path: 'image', select: 'name' });
 
   if (sort) {
-    const sortCriteria = {};
     const [field, order] = sort.split(':');
-    sortCriteria[field] = order === 'desc' ? -1 : 1;
-    query = query.sort(sortCriteria);
+    query = query.sort({ [field]: order === 'desc' ? -1 : 1 });
   }
 
-  if (limit) {
-    const parsedLimit = parseInt(limit, 10);
-    if (!isNaN(parsedLimit) && parsedLimit > 0) {
-      query = query.limit(parsedLimit);
-    }
-  }
+  const parsedLimit = parseInt(limit, 10) || 10;
+  const parsedPage = parseInt(page, 10) || 1;
+  const skip = (parsedPage - 1) * parsedLimit;
+
+  query = query.skip(skip).limit(parsedLimit);
 
   const result = await query;
+  const total = await Achievements.countDocuments(condition);
 
-  return result;
+  return {
+    data: result,
+    total,
+    page: parsedPage,
+    pages: Math.ceil(total / parsedLimit),
+  };
 };
 
 const getOneAchievement = async req => {
