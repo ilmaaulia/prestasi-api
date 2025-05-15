@@ -1,6 +1,7 @@
 const Admin = require('../../api/v1/admin/model');
 const { BadRequestError, UnauthorizedError } = require('../../errors');
-const { createTokenUser, createJWT } = require('../../utils');
+const { createTokenUser, createJWT, createRefreshJWT } = require('../../utils');
+const { createUserRefreshToken } = require('./refreshToken');
 
 const createAdmin = async req => {
   const { name, email, password, confirmPassword } = req.body;
@@ -37,7 +38,14 @@ const signin = async (req) => {
 
   const token = createJWT({ payload: createTokenUser(result) });
 
-  return { token, role: createTokenUser(result).role };
+  const refreshToken = createRefreshJWT({ payload: createTokenUser(result) });
+  await createUserRefreshToken({
+    refreshToken,
+    user: result._id,
+    userType: 'Admin',
+  });
+
+  return { token, refreshToken, role: createTokenUser(result).role };
 };
 
 module.exports = {

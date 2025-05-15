@@ -1,7 +1,8 @@
 const Students = require('../../api/v1/students/model');
 const { NotFoundError, BadRequestError, UnauthorizedError } = require('../../errors');
 const { otpMail } = require('../../services/email');
-const { createTokenStudent, createJWT } = require('../../utils');
+const { createTokenStudent, createJWT, createRefreshJWT } = require('../../utils');
+const { createUserRefreshToken } = require('./refreshToken');
 
 const signupStudents = async (req) => {
   const {
@@ -93,8 +94,16 @@ const signinStudents = async (req) => {
 
   const token = createJWT({ payload: createTokenStudent(result) });
 
+  const refreshToken = createRefreshJWT({ payload: createTokenStudent(result) });
+  await createUserRefreshToken({
+    refreshToken,
+    user: result._id,
+    userType: 'Student',
+  });
+
   return { 
     token,
+    refreshToken,
     id: result._id,
     firstName: result.firstName,
     role: createTokenStudent(result).role,

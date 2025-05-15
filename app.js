@@ -11,6 +11,7 @@ const imagesRouter = require('./app/api/v1/images/router');
 const studentsRouter = require('./app/api/v1/students/router');
 const newsesRouter = require('./app/api/v1/news/router');
 const adminRouter = require('./app/api/v1/admin/router');
+const userRefreshTokenRouter = require('./app/api/v1/userRefreshToken/router');
 
 const v1 = '/api/v1';
 
@@ -35,6 +36,7 @@ app.use(v1, imagesRouter);
 app.use(v1, studentsRouter);
 app.use(v1, newsesRouter);
 app.use(v1, adminRouter);
+app.use(v1, userRefreshTokenRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
