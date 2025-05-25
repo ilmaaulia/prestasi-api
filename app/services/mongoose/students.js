@@ -46,7 +46,7 @@ const signupStudents = async (req) => {
       email,
       password,
       image,
-      otp: Math.floor(Math.random() * 9999),
+      otp: Math.floor(1000 + Math.random() * 9000),
     });
   }
   await otpMail(email, result);
