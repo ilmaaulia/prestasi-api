@@ -1,38 +1,19 @@
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { cloudinary } = require('../config');
 
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/uploads/');
-  },
-  filename: function(req, file, cb) {
-    cb(null, Math.floor(Math.random() * 99999999) + '-' + file.originalname);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'prestasi',
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+    public_id: (_req, _file) => `${Date.now()}`,
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'image/jpeg' || 
-		file.mimetype === 'image/png' || 
-		file.mimetype === 'image/jpg'
-  ) {
-    cb(null, true);
-  } else {
-    //reject file
-    cb(
-      {
-        message: 'File tidak didukung',
-      },
-      false,
-    );
-  }
-};
-
 const uploadMiddleware = multer({
   storage,
-  limits: {
-    fileSize: 3000000,
-  },
-  fileFilter: fileFilter,
+  limits: { fileSize: 3 * 1024 * 1024 },
 });
 
 module.exports = uploadMiddleware;
