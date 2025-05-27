@@ -87,6 +87,7 @@ studentSchema.set('toJSON', {
   virtuals: true,
   transform: (doc, data) => {
     delete data.password;
+    delete data.otp;
     return data;
   },
 });
