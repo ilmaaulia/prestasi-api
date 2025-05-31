@@ -17,7 +17,7 @@ const newsSchema = Schema(
     image: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
-      default: '67fdaad050d25868ad5e6e4a',
+      default: '683a59e5a93b1384cae0f66c',
     },
   },
   { timestamps: true },

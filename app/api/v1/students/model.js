@@ -46,7 +46,7 @@ const studentSchema = Schema(
     image: {
       type: Schema.Types.ObjectId,
       ref: 'Image',
-      default: '6825647a0117b407f706e046',
+      default: '683a620ba93b1384cae0f66e',
     },
     status: {
       type: String,
