@@ -126,7 +126,7 @@ const signinStudents = async (req) => {
 };
 
 const getAllStudents = async (req) => {
-  const { keyword, study_program } = req.query;
+  const { keyword, study_program, status, sort, limit, page = 1 } = req.query;
 
   let condition = {};
 
@@ -144,11 +144,34 @@ const getAllStudents = async (req) => {
     condition = { ...condition, study_program };
   }
 
-  const result = await Students.find(condition)
+  if (status) {
+    condition = { ...condition, status };
+  }
+
+  let query = Students.find(condition)
     .populate({ path: 'achievements', select: 'name' })
     .populate({ path: 'image', select: 'name' });
 
-  return result;
+  if (sort) {
+    const [field, order] = sort.split(':');
+    query = query.sort({ [field]: order === 'desc' ? -1 : 1 });
+  }
+
+  const parsedLimit = parseInt(limit, 10) || 10;
+  const parsedPage = parseInt(page, 10) || 1;
+  const skip = (parsedPage - 1) * parsedLimit;
+
+  query = query.skip(skip).limit(parsedLimit);
+
+  const result = await query;
+  const total = await Students.countDocuments(condition);
+
+  return {
+    data: result,
+    total,
+    page: parsedPage,
+    pages: Math.ceil(total / parsedLimit),
+  };
 };
 
 const getOneStudent = async (req) => {
@@ -174,6 +197,7 @@ const updateStudents = async (req) => {
     email,
     password,
     image,
+    status,
   } = req.body;
 
   const student = await Students.findById(id);
@@ -186,6 +210,7 @@ const updateStudents = async (req) => {
   student.study_program = study_program || student.study_program;
   student.email = email || student.email;
   student.image = image || student.image;
+  student.status = status || student.status;
 
   if (password) {
     student.password = password;
