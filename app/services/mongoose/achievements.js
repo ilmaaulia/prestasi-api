@@ -33,6 +33,7 @@ const getAllAchievements = async req => {
     activity_type,
     achievement_type,
     competition_level,
+    status,
     sort,
     limit,
     student,
@@ -47,6 +48,7 @@ const getAllAchievements = async req => {
   if (achievement_type) condition.achievement_type = achievement_type;
   if (competition_level) condition.competition_level = competition_level;
   if (student) condition.student = student;
+  if (status) condition.status = status;
   if (keyword) {
     condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
   }
