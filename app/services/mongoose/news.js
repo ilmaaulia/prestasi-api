@@ -10,7 +10,7 @@ const createNews = async (req) => {
 };
 
 const getAllNewses = async (req) => {
-  const { keyword, sort, limit } = req.query;
+  const { keyword, sort, limit, page } = req.query;
 
   let condition = {};
 
@@ -28,16 +28,26 @@ const getAllNewses = async (req) => {
     query = query.sort(sortCriteria);
   }
   
-  if (limit) {
-    const parsedLimit = parseInt(limit, 10);
-    if (!isNaN(parsedLimit) && parsedLimit > 0) {
-      query = query.limit(parsedLimit);
-    }
+  if (sort) {
+    const [field, order] = sort.split(':');
+    query = query.sort({ [field]: order === 'desc' ? -1 : 1 });
   }
-
+  
+  const parsedLimit = parseInt(limit, 10) || 10;
+  const parsedPage = parseInt(page, 10) || 1;
+  const skip = (parsedPage - 1) * parsedLimit;
+  
+  query = query.skip(skip).limit(parsedLimit);
+  
   const result = await query;
-
-  return result;
+  const total = await News.countDocuments(condition);
+  
+  return {
+    data: result,
+    total,
+    page: parsedPage,
+    pages: Math.ceil(total / parsedLimit),
+  };
 };
 
 const getOneNews = async (req) => {
