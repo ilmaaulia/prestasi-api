@@ -150,7 +150,8 @@ const getAllStudents = async (req) => {
 
   let query = Students.find(condition)
     .populate({ path: 'achievements', select: 'name' })
-    .populate({ path: 'image', select: 'name' });
+    .populate({ path: 'image', select: 'name' })
+    .populate({ path: 'achievements_count' });
 
   if (sort) {
     const [field, order] = sort.split(':');
@@ -179,7 +180,8 @@ const getOneStudent = async (req) => {
 
   const result = await Students.findOne({ _id: id })
     .populate({ path: 'achievements', select: 'name' })
-    .populate({ path: 'image', select: 'name' });
+    .populate({ path: 'image', select: 'name' })
+    .populate({ path: 'achievements_count' });
 
   if (!result) throw new NotFoundError(`Tidak ada mahasiswa dengan id ${id}`);
 

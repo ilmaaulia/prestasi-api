@@ -69,6 +69,14 @@ studentSchema.virtual('achievements', {
   foreignField: 'student',
 });
 
+studentSchema.virtual('achievements_count', {
+  ref: 'Achievement',
+  localField: '_id',
+  foreignField: 'student',
+  count: true,
+  match: { status: 'Valid' },
+});
+
 studentSchema.pre('save', async function(next) {
   const User = this;
   if (User.isModified('password')) {
