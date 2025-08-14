@@ -6,9 +6,13 @@ const studentSchema = Schema(
     firstName: {
       type: String,
       required: [true, 'Nama depan wajib diisi'],
+      trim: true,
+      maxlength: [50, 'Nama depan maksimal 50 karakter'],
     },
     lastName: {
       type: String,
+      trim: true,
+      maxlength: [50, 'Nama belakang maksimal 50 karakter'],
     },
     student_id: {
       type: String,
@@ -16,6 +20,7 @@ const studentSchema = Schema(
       required: [true, 'NIM harus diisi'],
       minlength: [8, 'NIM harus 8 karakter'],
       maxlength: [8, 'NIM harus 8 karakter'],
+      trim: true,
     },
     study_program: {
       type: String,
@@ -38,10 +43,15 @@ const studentSchema = Schema(
       unique: true,
       required: [true, 'Email harus diisi'],
       match: [/\S+@\S+\.\S+/, 'Format email tidak valid'],
+      trim: true,
+      lowercase: true,
+      maxlength: [254, 'Panjang email maksimal 254 karakter'],
     },
     password: {
       type: String,
       required: [true, 'Password harus diisi'],
+      minlength: [6, 'Panjang password minimal 6 karakter'],
+      maxlength: [128, 'Panjang password maksimal 128 karakter'],
     },
     image: {
       type: Schema.Types.ObjectId,

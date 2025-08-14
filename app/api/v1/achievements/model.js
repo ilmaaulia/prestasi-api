@@ -12,7 +12,9 @@ let achievementSchema = Schema(
     name: {
       type: String,
       minlength: [6, 'Panjang nama prestasi minimal 6 karakter'],
+      maxlength: [200, 'Panjang nama prestasi maksimal 200 karakter'],
       required: [true, 'Nama prestasi harus diisi'],
+      trim: true,
     },
     date: {
       type: Date,
